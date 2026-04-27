@@ -14,7 +14,7 @@ const LoginPage = () => {
   // ── Google Auth Logic ────────────────────────────────────────
   const handleGoogleSuccess = async (tokenResponse) => {
     try {
-      const { data } = await axios.post('http://127.0.0.1:5000/api/auth/google', {
+      const { data } = await axios.post('http://localhost:5000/api/auth/google', {
         token: tokenResponse.access_token
       });
 
@@ -41,7 +41,7 @@ const LoginPage = () => {
     
     setLoading(true);
     try {
-      const { data } = await axios.post('http://127.0.0.1:5000/api/auth/login', { email, password });
+      const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/dashboard');

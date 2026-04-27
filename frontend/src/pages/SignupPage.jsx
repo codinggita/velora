@@ -14,13 +14,23 @@ const SignupPage = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token: tokenResponse.access_token }),
         });
+        
         const data = await response.json();
+        
+        if (!response.ok) {
+           throw new Error(data.message || 'Authentication failed');
+        }
+
         if (data.token) {
           localStorage.setItem('token', data.token);
+          if (data.user) {
+            localStorage.setItem('user', JSON.stringify(data.user));
+          }
           navigate('/dashboard');
         }
       } catch (error) {
         console.error('Google login failed:', error);
+        alert(`Login failed: ${error.message}`);
       }
     },
     onError: errorResponse => console.error(errorResponse),
@@ -31,11 +41,13 @@ const SignupPage = () => {
       {/* ── LEFT PANEL ────────────────────────────── */}
       <div className="w-[42%] bg-[#127475] p-10 flex flex-col justify-between relative text-white">
         {/* Logo */}
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 bg-white rounded-lg flex items-center justify-center">
-            <div className="w-3 h-3 rounded-[3px] border-[2px] border-[#127475]"></div>
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
+          <div className="text-white">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+            </svg>
           </div>
-          <span className="font-medium text-lg tracking-tight">FamilyFinance</span>
+          <span className="font-medium text-[20px] tracking-tight">Velora</span>
         </div>
 
         {/* Content */}
@@ -184,7 +196,7 @@ const SignupPage = () => {
 
         {/* Footer */}
         <footer className="shrink-0 border-t border-[#E5E7EB] py-5 px-8 lg:px-16 flex justify-between items-center text-[12px] text-[#9CA3AF]">
-          <span>© 2024 FamilyFinance. Safe & Secure.</span>
+          <span>© 2026 Velora. Safe & Secure.</span>
           <div className="flex gap-6">
             <a href="#" className="hover:text-[#6B7280] transition-colors">Help Center</a>
             <a href="#" className="hover:text-[#6B7280] transition-colors">Contact Support</a>

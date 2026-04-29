@@ -73,26 +73,6 @@ button {
   padding: 80px 0;
 }
 
-.flex {
-  display: flex;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.justify-between {
-  justify-content: space-between;
-}
-
-.grid {
-  display: grid;
-}
-
-.text-center {
-  text-align: center;
-}
-
 /* Buttons */
 .btn {
   padding: 12px 24px;

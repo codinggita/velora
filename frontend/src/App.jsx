@@ -7,6 +7,8 @@ import DashboardPage from './pages/DashboardPage';
 import TransactionsPage from './pages/TransactionsPage';
 import BudgetPage from './pages/BudgetPage';
 import FamilyPage from './pages/FamilyPage';
+import GoalsPage from './pages/GoalsPage';
+import SubscriptionsPage from './pages/SubscriptionsPage';
 
 const App = () => {
   return (
@@ -19,6 +21,8 @@ const App = () => {
         <Route path="/transactions" element={<TransactionsPage />} />
         <Route path="/budget" element={<BudgetPage />} />
         <Route path="/family" element={<FamilyPage />} />
+        <Route path="/goals" element={<GoalsPage />} />
+        <Route path="/subscriptions" element={<SubscriptionsPage />} />
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

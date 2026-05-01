@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
 
 const BudgetPage = () => {
   const navigate = useNavigate();
@@ -16,17 +17,6 @@ const BudgetPage = () => {
     return p[p.length - 1];
   };
 
-  const nav = [
-    { n: 'Dashboard', d: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z', p: '/dashboard' },
-    { n: 'Transactions', d: 'M3 4h18v18H3zM16 2v4M8 2v4M3 10h18', p: '/transactions' },
-    { n: 'Family', d: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z', p: '/family' },
-    { n: 'Budget', d: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 6v6l4 2', p: '/budget', active: true },
-    { n: 'Goals', d: 'M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4 12 14.01 9 11.01', p: '/goals' },
-    { n: 'Subscriptions', d: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z', p: '/subscriptions' },
-    { n: 'AI Coach', d: 'M3 11h18v10H3zM12 3a2 2 0 1 0 0 4M12 7v4' },
-    { n: 'Reports', d: 'M18 20V10M12 20V4M6 20v-6' },
-    { n: 'Settings', d: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z' },
-  ];
 
   const cats = [
     { name: 'Rent', spent: 22000, limit: 22000, status: 'NEAR LIMIT', sc: '#F59E0B' },
@@ -60,43 +50,17 @@ const BudgetPage = () => {
 
   return (
     <div className="flex h-screen w-screen bg-[#FAFAF7] overflow-hidden" style={{ fontFamily: "'Inter','Segoe UI',sans-serif" }}>
-      {/* Sidebar */}
-      <aside className="w-[240px] bg-white border-r border-gray-100 flex flex-col py-6 px-4 shrink-0 h-full">
-        <div className="flex items-center gap-2.5 px-3 mb-8 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="w-8 h-8 rounded-lg bg-[#127475] flex items-center justify-center text-white">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          </div>
-          <div>
-            <div className="text-[#127475] font-bold text-[16px] leading-tight">FamilyFinance</div>
-            <div className="text-[9px] text-gray-400 font-bold uppercase tracking-[0.15em]">Wise Guardian</div>
-          </div>
-        </div>
-        <nav className="flex flex-col gap-0.5 flex-1 px-0.5">
-          {nav.map((item, i) => (
-            <button key={i} onClick={() => item.p && navigate(item.p)}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-[13px] font-semibold transition-all ${item.active ? 'bg-[#E8F5F4] text-[#127475]' : 'text-gray-400 hover:bg-gray-50 hover:text-gray-700'}`}>
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={item.d}/></svg>
-              {item.n}
-            </button>
-          ))}
-        </nav>
-        <div className="mt-4 px-2 pt-4 border-t border-gray-100 flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-gray-100">
-            <img src={user?.picture || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rajesh'} alt="" className="w-full h-full object-cover"/>
-          </div>
-          <div>
-            <div className="text-[13px] font-bold text-gray-800 leading-tight">{user?.fullName || 'Rajesh Sharma'}</div>
-            <div className="text-[10px] text-gray-400">Head of Family</div>
-          </div>
-        </div>
-      </aside>
+      <Sidebar user={user} />
 
       {/* Main */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         {/* Header */}
         <header className="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-100 shrink-0">
           <div className="flex items-center gap-4">
-            <h1 className="text-[18px] font-bold text-gray-900">Budget Planner</h1>
+            <div>
+              <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Velora / Budget Planner</div>
+              <h1 className="text-[24px] font-bold text-gray-900 leading-tight">Budget Planner</h1>
+            </div>
             <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full text-[13px] font-semibold text-gray-600">
               <button className="hover:text-[#127475]"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="15 18 9 12 15 6"/></svg></button>
               <span>October 2025</span>

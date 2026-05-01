@@ -219,7 +219,7 @@ const SignupPage = () => {
               { icon: '↻', title: 'Auto-sync', desc: 'Connected bank accounts update in real-time.' },
               { icon: '✧', title: 'AI insights', desc: 'Smart suggestions to save more every month.' },
               { icon: '👥', title: 'Family budgets', desc: 'Shared visibility for collective goals.' },
-              { icon: '✓', title: 'Free forever', desc: 'Core features will always be accessible.' },
+              { icon: '✓', title: 'Free for 21 days', desc: 'Experience the full power of Velora.' },
             ].map((f, i) => (
               <div key={i} className="flex items-start gap-4">
                 <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center shrink-0 text-lg text-[#BDE3E0]">

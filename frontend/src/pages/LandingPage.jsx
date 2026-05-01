@@ -47,9 +47,11 @@ const LandingPage = () => {
       {/* ── NAVBAR ─────────────────────────────────────────────── */}
       <nav className="navbar">
         <div className="container flex items-center justify-between">
-          <div className="logo flex items-center" style={{ gap: '8px', cursor: 'pointer' }} onClick={() => navigate('/')}>
-            <div style={{ width: '32px', height: '32px', background: 'var(--primary)', borderRadius: '8px' }} />
-            <span style={{ fontWeight: 800, fontSize: '24px', color: 'var(--primary)', letterSpacing: '-0.5px' }}>Velora</span>
+          <div className="logo flex items-center" style={{ gap: '12px', cursor: 'pointer' }} onClick={() => navigate('/')}>
+            <div style={{ width: '36px', height: '36px', background: '#127475', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(18, 116, 117, 0.2)' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#32E0C4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+            </div>
+            <span style={{ fontWeight: 800, fontSize: '24px', color: '#127475', letterSpacing: '-0.5px' }}>Velora</span>
           </div>
           <div className="nav-links flex">
             <a href="#features">Features</a>
@@ -379,9 +381,11 @@ const LandingPage = () => {
         <div className="section-padding" style={{ paddingTop: '60px', paddingBottom: '40px' }}>
           <div className="container grid" style={{ gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: '40px' }}>
             <div>
-              <div className="logo flex items-center" style={{ gap: '8px', marginBottom: '20px', cursor: 'pointer' }} onClick={() => navigate('/')}>
-                <div style={{ width: '24px', height: '24px', background: 'var(--primary)', borderRadius: '6px' }} />
-                <span style={{ fontWeight: 800, fontSize: '20px', color: 'var(--primary)', letterSpacing: '-0.5px' }}>Velora</span>
+              <div className="logo flex items-center" style={{ gap: '10px', marginBottom: '20px', cursor: 'pointer' }} onClick={() => navigate('/')}>
+                <div style={{ width: '28px', height: '28px', background: '#127475', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#32E0C4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                </div>
+                <span style={{ fontWeight: 800, fontSize: '20px', color: '#127475', letterSpacing: '-0.5px' }}>Velora</span>
               </div>
               <p style={{ fontSize: '14px', color: 'var(--text-secondary)', maxWidth: '240px' }}>Know where every rupee goes. Designed for Indian families across generations.</p>
             </div>

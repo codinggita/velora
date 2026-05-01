@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
 
 const FamilyPage = () => {
   const navigate = useNavigate();
@@ -11,63 +12,22 @@ const FamilyPage = () => {
     if (d) setUser(JSON.parse(d));
   }, [navigate]);
 
-  const nav = [
-    { n: 'Dashboard', d: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z', p: '/dashboard' },
-    { n: 'Transactions', d: 'M3 4h18v18H3zM16 2v4M8 2v4M3 10h18', p: '/transactions' },
-    { n: 'Family', d: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z', p: '/family', active: true },
-    { n: 'Budget', d: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 6v6l4 2', p: '/budget' },
-    { n: 'Goals', d: 'M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4 12 14.01 9 11.01', p: '/goals' },
-    { n: 'Subscriptions', d: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z', p: '/subscriptions' },
-    { n: 'AI Coach', d: 'M3 11h18v10H3zM12 3a2 2 0 1 0 0 4M12 7v4' },
-    { n: 'Reports', d: 'M18 20V10M12 20V4M6 20v-6' },
-    { n: 'Settings', d: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z' },
-  ];
 
   const months = ['January', 'February', 'March'];
 
   return (
     <div style={{display:'flex',height:'100vh',width:'100vw',background:'#FAFAF7',overflow:'hidden',fontFamily:"'Inter','Segoe UI',sans-serif"}}>
-      {/* Sidebar */}
-      <aside style={{width:'220px',background:'#fff',borderRight:'1px solid #f0f0f0',display:'flex',flexDirection:'column',padding:'24px 16px',flexShrink:0,height:'100%'}}>
-        <div style={{display:'flex',alignItems:'center',gap:'10px',padding:'0 8px',marginBottom:'32px',cursor:'pointer'}} onClick={() => navigate('/')}>
-          <div style={{width:'32px',height:'32px',borderRadius:'8px',background:'#127475',display:'flex',alignItems:'center',justifyContent:'center',color:'#fff'}}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          </div>
-          <div>
-            <div style={{color:'#127475',fontWeight:700,fontSize:'15px',lineHeight:1.2}}>FamilyFinance</div>
-            <div style={{fontSize:'8px',color:'#9ca3af',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.15em'}}>Wise Guardian</div>
-          </div>
-        </div>
-        <nav style={{display:'flex',flexDirection:'column',gap:'2px',flex:1}}>
-          {nav.map((item, i) => (
-            <button key={i} onClick={() => item.p && navigate(item.p)}
-              style={{width:'100%',display:'flex',alignItems:'center',gap:'10px',padding:'10px 14px',borderRadius:'8px',fontSize:'13px',fontWeight:600,border:'none',cursor:'pointer',transition:'all 0.2s',
-                background: item.active ? '#E8F5F4' : 'transparent',
-                color: item.active ? '#127475' : '#9ca3af',
-                borderLeft: item.active ? '3px solid #127475' : '3px solid transparent'
-              }}>
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={item.d}/></svg>
-              {item.n}
-            </button>
-          ))}
-        </nav>
-        <div style={{marginTop:'16px',padding:'12px 8px 0',borderTop:'1px solid #f0f0f0',display:'flex',alignItems:'center',gap:'10px'}}>
-          <div style={{width:'36px',height:'36px',borderRadius:'50%',overflow:'hidden',border:'2px solid #f0f0f0'}}>
-            <img src={user?.picture || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rajesh'} alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
-          </div>
-          <div>
-            <div style={{fontSize:'13px',fontWeight:700,color:'#111827'}}>{user?.fullName || 'Rajesh Kumar'}</div>
-            <div style={{fontSize:'10px',color:'#9ca3af'}}>Head of Family</div>
-          </div>
-        </div>
-      </aside>
+      <Sidebar user={user} />
 
       {/* Main */}
       <div style={{flex:1,display:'flex',flexDirection:'column',height:'100%',overflow:'hidden'}}>
         {/* Header */}
         <header style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'16px 32px',background:'#fff',borderBottom:'1px solid #f0f0f0',flexShrink:0}}>
           <div style={{display:'flex',alignItems:'center',gap:'32px'}}>
-            <h1 style={{fontSize:'18px',fontWeight:700,color:'#111827',margin:0}}>Family Budget Council</h1>
+            <div>
+              <div style={{fontSize:'10px',fontWeight:700,color:'#9ca3af',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:'4px'}}>Velora / Family Council</div>
+              <h1 style={{fontSize:'22px',fontWeight:800,color:'#111827',margin:0}}>Family Council</h1>
+            </div>
             <div style={{display:'flex',gap:'4px'}}>
               {months.map(m => (
                 <button key={m} onClick={() => setActiveMonth(m)}
@@ -292,7 +252,7 @@ const FamilyPage = () => {
                   <span key={i} style={{fontSize:'11px',color:'#9ca3af',cursor:'pointer'}}>{l}</span>
                 ))}
               </div>
-              <div style={{fontSize:'11px',color:'#d1d5db'}}>© 2024 FamilyFinance • Secured by Wise Guardian Systems</div>
+              <div style={{fontSize:'11px',color:'#d1d5db'}}>© 2024 Velora • Secured by Wise Guardian Systems</div>
             </div>
 
           </div>

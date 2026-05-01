@@ -9,6 +9,9 @@ import BudgetPage from './pages/BudgetPage';
 import FamilyPage from './pages/FamilyPage';
 import GoalsPage from './pages/GoalsPage';
 import SubscriptionsPage from './pages/SubscriptionsPage';
+import AICoachPage from './pages/AICoachPage';
+import ReportsPage from './pages/ReportsPage';
+import SettingsPage from './pages/SettingsPage';
 
 const App = () => {
   return (
@@ -23,6 +26,9 @@ const App = () => {
         <Route path="/family" element={<FamilyPage />} />
         <Route path="/goals" element={<GoalsPage />} />
         <Route path="/subscriptions" element={<SubscriptionsPage />} />
+        <Route path="/aicoach" element={<AICoachPage />} />
+        <Route path="/reports" element={<ReportsPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -13,22 +13,22 @@ const LandingPage = () => {
   const plans = [
     {
       name: 'Individual',
-      monthly: { price: '₹0', period: '/forever', annual: null },
-      yearly: { price: '₹0', period: '/forever', annual: null, savings: null },
+      monthly: { price: '₹0', period: '/21 days', annual: null },
+      yearly: { price: '₹0', period: '/21 days', annual: null, savings: null },
       features: ['1 Member Account', 'Basic UPI Tracking', 'Goal tracking (2)'],
       cta: 'Get Started', variant: 'outline', popular: false,
     },
     {
       name: 'Family',
       monthly: { price: '₹199', period: '/month', annual: null },
-      yearly: { price: '₹159', period: '/month', annual: '₹1,908/year', savings: 'Save ₹480/year' },
+      yearly: { price: '₹1,908', period: '/year', monthly: '₹159/month', savings: 'Save ₹480/year' },
       features: ['Up to 5 Family Members', 'Advanced UPI & Bank Sync', 'AI Coaching Insights', 'Family Budget Council'],
       cta: 'Start 30 Day Free Trial', variant: 'primary', popular: true,
     },
     {
       name: 'Premium',
       monthly: { price: '₹399', period: '/month', annual: null },
-      yearly: { price: '₹319', period: '/month', annual: '₹3,828/year', savings: 'Save ₹960/year' },
+      yearly: { price: '₹3,828', period: '/year', monthly: '₹319/month', savings: 'Save ₹960/year' },
       features: ['Unlimited Members', 'Tax Helper & Reports', 'Annual Wealth Analysis', 'Priority Support'],
       cta: 'Explore Sales', variant: 'outline', popular: false,
     },
@@ -312,10 +312,10 @@ const LandingPage = () => {
                     <span style={{ fontSize: '14px', opacity: 0.6 }}>{cur.period}</span>
                   </div>
                   <div style={{ minHeight: '44px', marginBottom: '16px' }}>
-                    {billing === 'yearly' && cur.annual && (
+                    {billing === 'yearly' && cur.monthly && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                         <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                          Billed <strong style={{ color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>{cur.annual}</strong>
+                          Equivalent to <strong style={{ color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>{cur.monthly}</strong>
                         </span>
                         <span style={{ display: 'inline-block', background: 'var(--accent-light)', color: 'var(--primary)', fontSize: '12px', fontWeight: 700, padding: '3px 10px', borderRadius: '20px', width: 'fit-content' }}>
                           🎉 {cur.savings}
@@ -357,13 +357,13 @@ const LandingPage = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flexShrink: 0 }}>
               <div style={{ display: 'flex', gap: '16px' }}>
                 {[
-                  { label: 'FAMILY — YEARLY', price: '₹159', annual: '₹1,908/year', save: 'Save ₹480/year', bg: 'rgba(255,255,255,0.1)', border: 'rgba(255,255,255,0.2)' },
-                  { label: 'PREMIUM — YEARLY', price: '₹319', annual: '₹3,828/year', save: 'Save ₹960/year', bg: 'rgba(255,255,255,0.07)', border: 'rgba(255,255,255,0.15)' },
+                  { label: 'FAMILY — YEARLY', price: '₹1,908', monthly: '₹159/mo', save: 'Save ₹480/year', bg: 'rgba(255,255,255,0.1)', border: 'rgba(255,255,255,0.2)' },
+                  { label: 'PREMIUM — YEARLY', price: '₹3,828', monthly: '₹319/mo', save: 'Save ₹960/year', bg: 'rgba(255,255,255,0.07)', border: 'rgba(255,255,255,0.15)' },
                 ].map((c, i) => (
                   <div key={i} style={{ background: c.bg, border: `1px solid ${c.border}`, borderRadius: '16px', padding: '20px 24px', textAlign: 'center', minWidth: '160px' }}>
                     <div style={{ fontSize: '11px', opacity: 0.7, marginBottom: '6px', fontWeight: 700, letterSpacing: '0.06em' }}>{c.label}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '26px', fontWeight: 700 }}>{c.price}<span style={{ fontSize: '13px', opacity: 0.7 }}>/mo</span></div>
-                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', margin: '4px 0 2px' }}>Billed <strong style={{ color: 'white' }}>{c.annual}</strong></div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '26px', fontWeight: 700 }}>{c.price}<span style={{ fontSize: '13px', opacity: 0.7 }}>/yr</span></div>
+                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', margin: '4px 0 2px' }}>Equivalent to <strong style={{ color: 'white' }}>{c.monthly}</strong></div>
                     <div style={{ fontSize: '12px', color: '#2DD4BF', fontWeight: 700 }}>{c.save}</div>
                   </div>
                 ))}

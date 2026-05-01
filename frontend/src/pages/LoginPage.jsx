@@ -1,7 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+
+/* ─────────────── Toast Notification Component ─────────────── */
+const Toast = ({ message, type, onClose }) => {
+  const [isExiting, setIsExiting] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsExiting(true);
+      setTimeout(onClose, 400);
+    }, 4500);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  const colors = {
+    success: { bg: '#ECFDF5', border: '#10B981', text: '#065F46', icon: '✓' },
+    error:   { bg: '#FEF2F2', border: '#EF4444', text: '#991B1B', icon: '✕' },
+    warning: { bg: '#FFFBEB', border: '#F59E0B', text: '#92400E', icon: '⚠' },
+    info:    { bg: '#EFF6FF', border: '#3B82F6', text: '#1E40AF', icon: 'ℹ' },
+  };
+  const c = colors[type] || colors.info;
+
+  return (
+    <div style={{
+      position: 'fixed', top: '32px', right: '32px', zIndex: 9999,
+      display: 'flex', alignItems: 'flex-start', gap: '12px',
+      padding: '16px 20px', minWidth: '340px', maxWidth: '440px',
+      background: c.bg, border: `1px solid ${c.border}20`,
+      borderLeft: `4px solid ${c.border}`,
+      borderRadius: '16px',
+      boxShadow: '0 20px 60px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.06)',
+      animation: isExiting ? 'toastOut 0.4s ease forwards' : 'toastIn 0.5s cubic-bezier(0.16,1,0.3,1)',
+      backdropFilter: 'blur(20px)',
+    }}>
+      <style>{`
+        @keyframes toastIn { from { opacity:0; transform:translateX(100px) scale(0.95); } to { opacity:1; transform:translateX(0) scale(1); } }
+        @keyframes toastOut { from { opacity:1; transform:translateX(0) scale(1); } to { opacity:0; transform:translateX(100px) scale(0.95); } }
+        @keyframes progressShrink { from { width:100%; } to { width:0%; } }
+      `}</style>
+      <div style={{
+        width: '28px', height: '28px', borderRadius: '50%', background: c.border,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: '#fff', fontSize: '13px', fontWeight: '700', flexShrink: 0, marginTop: '1px',
+      }}>{c.icon}</div>
+      <div style={{ flex: 1 }}>
+        <p style={{ margin: 0, fontSize: '13px', fontWeight: '600', color: c.text, lineHeight: '1.5' }}>{message}</p>
+      </div>
+      <button onClick={() => { setIsExiting(true); setTimeout(onClose, 400); }} style={{
+        background: 'none', border: 'none', cursor: 'pointer', color: c.text,
+        opacity: 0.5, fontSize: '18px', padding: '0', lineHeight: 1, flexShrink: 0, marginTop: '-2px',
+      }}>×</button>
+      <div style={{
+        position: 'absolute', bottom: '0', left: '4px', right: '4px', height: '3px',
+        borderRadius: '0 0 16px 16px', overflow: 'hidden',
+      }}>
+        <div style={{
+          height: '100%', background: c.border, borderRadius: '4px',
+          animation: 'progressShrink 4.5s linear forwards',
+        }} />
+      </div>
+    </div>
+  );
+};
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -10,32 +72,57 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loginMethod, setLoginMethod] = useState('email'); // 'email' or 'otp'
+  const [toast, setToast] = useState(null);
+
+  const showToast = (message, type = 'error') => {
+    setToast({ message, type, key: Date.now() });
+  };
 
   // ── Google Auth Logic ────────────────────────────────────────
   const handleGoogleSuccess = async (tokenResponse) => {
+    setLoading(true);
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/google', {
+      const { data } = await axios.post('http://localhost:5000/api/auth/google/login', {
         token: tokenResponse.access_token
       });
 
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-      navigate('/dashboard');
+      showToast('Login successful! Redirecting...', 'success');
+      setTimeout(() => navigate('/dashboard'), 1200);
     } catch (error) {
-      console.error('Login Error:', error);
-      alert(`Login failed: ${error.response?.data?.message || error.message || 'Unknown error'}`);
+      const msg = error.response?.data?.message || error.message || 'Unknown error';
+      const code = error.response?.data?.code;
+      
+      if (code === 'USER_NOT_FOUND') {
+        showToast('No account found with this Google email. Please sign up first to create an account.', 'error');
+      } else {
+        showToast(msg, 'error');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   const loginWithGoogle = useGoogleLogin({
     onSuccess: handleGoogleSuccess,
-    onError: () => alert('Google Login Failed'),
+    onError: () => showToast('Google authentication was cancelled or failed.', 'error'),
   });
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     if (loginMethod !== 'email') {
-      alert("Only Email login is implemented for now.");
+      showToast('Only email login is available at the moment.', 'warning');
+      return;
+    }
+
+    if (!email.trim()) {
+      showToast('Please enter your email address.', 'warning');
+      return;
+    }
+    if (!password) {
+      showToast('Please enter your password.', 'warning');
       return;
     }
     
@@ -44,10 +131,21 @@ const LoginPage = () => {
       const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-      navigate('/dashboard');
+      showToast('Login successful! Redirecting to dashboard...', 'success');
+      setTimeout(() => navigate('/dashboard'), 1200);
     } catch (error) {
-      console.error('Login Error:', error);
-      alert(`Login failed: ${error.response?.data?.message || error.message || 'Unknown error'}`);
+      const msg = error.response?.data?.message || error.message || 'Unknown error';
+      const code = error.response?.data?.code;
+
+      if (code === 'USER_NOT_FOUND') {
+        showToast('No account found with this email. Please sign up first to create an account.', 'error');
+      } else if (code === 'WRONG_PASSWORD') {
+        showToast('Incorrect password. Please check your password and try again.', 'error');
+      } else if (code === 'GOOGLE_ACCOUNT') {
+        showToast('This account was created with Google. Please use the "Continue with Google" button below.', 'warning');
+      } else {
+        showToast(msg, 'error');
+      }
     } finally {
       setLoading(false);
     }
@@ -55,6 +153,9 @@ const LoginPage = () => {
 
   return (
     <div className="h-screen w-full overflow-hidden bg-[#fdfbf7] flex flex-col font-sans">
+
+      {/* Toast Notification */}
+      {toast && <Toast key={toast.key} message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       
       {/* Top Logo - Fixed at top */}
       <div className="flex-none pt-8 pb-2 flex justify-center">
@@ -116,7 +217,6 @@ const LoginPage = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="e.g. sarah@family.com" 
-                  required
                   className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-[13px] focus:outline-none focus:border-[#13766b] focus:ring-1 focus:ring-[#13766b] transition-all placeholder:text-gray-400"
                 />
               </div>
@@ -137,7 +237,6 @@ const LoginPage = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••" 
-                    required
                     className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-[13px] focus:outline-none focus:border-[#13766b] focus:ring-1 focus:ring-[#13766b] transition-all placeholder:text-gray-400 tracking-widest"
                   />
                   <button 
@@ -181,7 +280,12 @@ const LoginPage = () => {
                 disabled={loading}
                 className="w-full bg-[#13766b] hover:bg-[#106259] text-white py-2.5 rounded-xl font-medium text-[13px] transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-sm cursor-pointer"
               >
-                {loading ? 'Logging in...' : 'Login'}
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+                    Logging in...
+                  </span>
+                ) : 'Login'}
               </button>
             </form>
 
@@ -195,7 +299,8 @@ const LoginPage = () => {
             <button 
               type="button" 
               onClick={() => loginWithGoogle()}
-              className="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 py-2.5 rounded-xl font-medium text-[13px] transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+              disabled={loading}
+              className="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 py-2.5 rounded-xl font-medium text-[13px] transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer disabled:opacity-50"
             >
               <svg width="15" height="15" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />

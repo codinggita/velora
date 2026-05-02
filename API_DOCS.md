@@ -1,67 +1,112 @@
-# Velora API Documentation
+# 📋 Velora API Documentation
 
-This document outlines the available API endpoints for the Velora Backend.
+Welcome to the **Velora Backend API**. This documentation provides everything you need to integrate with our financial management services.
 
-## Base URL
-- Local: `http://localhost:5000`
-- Production: `https://<your-render-app>.onrender.com`
+## 🚀 Base URL
+- **Development**: `http://localhost:5000`
+- **Production**: `https://velora-backend.onrender.com` (Example)
 
 ---
 
-## 1. Authentication
-All auth routes are under `/api/auth`.
+## 🔐 Authentication
+Velora uses **JWT (JSON Web Tokens)** for secure authentication.
 
-### POST `/signup`
-Register a new user with email and password.
-- **Body**:
+### 1. Register User (Email/Password)
+`POST /api/auth/signup`
+
+Registers a new user and returns a token.
+
+**Request Body:**
+```json
+{
+  "fullName": "John Doe",
+  "email": "john@example.com",
+  "password": "securepassword123",
+  "mobile": "9876543210",
+  "familySize": "3 - 4"
+}
+```
+
+**Success Response:**
+- **Code**: `201 Created`
+- **Content**:
   ```json
   {
-    "fullName": "John Doe",
-    "email": "john@example.com",
-    "password": "securepassword",
-    "mobile": "9876543210",
-    "familySize": "3 - 4"
+    "token": "eyJhbGciOiJIUzI1...",
+    "user": {
+      "id": "64f1...",
+      "fullName": "John Doe",
+      "email": "john@example.com"
+    }
   }
   ```
-- **Response**: `201 Created` with JWT token and user info.
-
-### POST `/login`
-Login with email and password.
-- **Body**:
-  ```json
-  {
-    "email": "john@example.com",
-    "password": "securepassword"
-  }
-  ```
-- **Response**: `200 OK` with JWT token.
-
-### POST `/google/signup`
-Register via Google OAuth.
-- **Body**: `{ "token": "GOOGLE_ACCESS_TOKEN" }`
-- **Response**: `201 Created` with JWT token.
-
-### POST `/google/login`
-Login via Google OAuth.
-- **Body**: `{ "token": "GOOGLE_ACCESS_TOKEN" }`
-- **Response**: `200 OK` with JWT token.
 
 ---
 
-## 2. Transactions (Planned)
-Requires `Authorization: Bearer <token>`
+### 2. Login User (Email/Password)
+`POST /api/auth/login`
 
-### GET `/api/transactions`
-Get all transactions for the authenticated user.
+Authenticates a user and returns a token.
 
-### POST `/api/transactions`
-Create a new transaction.
-- **Body**: `{ "title": String, "amount": Number, "category": String, "type": "income" | "expense" }`
+**Request Body:**
+```json
+{
+  "email": "john@example.com",
+  "password": "securepassword123"
+}
+```
+
+**Success Response:**
+- **Code**: `200 OK`
+- **Content**: `{ "token": "...", "user": { ... } }`
 
 ---
 
-## 3. Deployment (Render.com)
-The project is configured for Render via `render.yaml`.
-- **Build Command**: `npm install`
-- **Start Command**: `node server.js`
-- **Environment Variables required**: `MONGO_URI`, `JWT_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`.
+### 3. Google OAuth Signup
+`POST /api/auth/google/signup`
+
+Creates a new account using a Google Access Token.
+
+**Request Body:**
+```json
+{
+  "token": "GOCSPX-..."
+}
+```
+
+---
+
+### 4. Google OAuth Login
+`POST /api/auth/google/login`
+
+Logs into an existing account using a Google Access Token.
+
+---
+
+## 💸 Transactions (Planned)
+`GET /api/transactions`
+- **Headers**: `Authorization: Bearer <token>`
+- **Description**: Fetches all transactions for the logged-in user.
+
+---
+
+## 🛠️ Deployment Configuration
+The project is set up for **Render.com** via the `render.yaml` file.
+
+### Required Environment Variables:
+| Variable | Description |
+| :--- | :--- |
+| `PORT` | 5000 (Default) |
+| `MONGO_URI` | Your MongoDB Atlas connection string |
+| `JWT_SECRET` | Secret key for signing tokens |
+| `GOOGLE_CLIENT_ID` | Your Google Cloud project ID |
+
+---
+
+## ⚠️ Error Codes
+| Status | Meaning |
+| :--- | :--- |
+| `400` | Bad Request (Missing fields or invalid data) |
+| `401` | Unauthorized (Missing or invalid token) |
+| `404` | Not Found |
+| `500` | Internal Server Error |

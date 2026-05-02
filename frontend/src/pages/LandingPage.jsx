@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import SEO from '../components/SEO';
 import dashboardPreview from '../assets/dashboard_preview.png';
 
 const LandingPage = () => {
@@ -43,6 +45,10 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
+      <SEO 
+        title="Home" 
+        description="Finally — One Place For Every Rupee Your Family Spends. Automated UPI tracking and family budget sharing." 
+      />
 
       {/* ── NAVBAR ─────────────────────────────────────────────── */}
       <nav className="navbar">
@@ -60,8 +66,8 @@ const LandingPage = () => {
             <a href="#blog">Blog</a>
           </div>
           <div className="nav-actions flex" style={{ gap: '12px' }}>
-            <button className="btn btn-ghost" onClick={goToLogin}>Login</button>
-            <button className="btn btn-primary" onClick={goToSignup}>Sign Up</button>
+            <Button variant="text" sx={{ color: '#127475', fontWeight: 600 }} onClick={goToLogin}>Login</Button>
+            <Button variant="contained" sx={{ bgcolor: '#127475', borderRadius: '12px', px: 3, py: 1 }} onClick={goToSignup}>Sign Up</Button>
           </div>
         </div>
       </nav>
@@ -77,9 +83,23 @@ const LandingPage = () => {
               Built for the modern Indian household to grow your wealth together.
             </p>
             <div className="flex" style={{ gap: '16px' }}>
-              <button className="btn btn-primary" style={{ padding: '16px 32px' }} onClick={goToSignup}>
-                Start First Now
-              </button>
+              <Button 
+                variant="contained" 
+                size="large"
+                onClick={goToSignup}
+                sx={{ 
+                  bgcolor: '#127475', 
+                  py: 2, 
+                  px: 4, 
+                  borderRadius: '16px', 
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  boxShadow: '0 10px 30px rgba(18, 116, 117, 0.3)',
+                  '&:hover': { bgcolor: '#0f5e5f' }
+                }}
+              >
+                Start Free Now
+              </Button>
               <button className="btn btn-outline" style={{ padding: '16px 32px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16 10 8" />

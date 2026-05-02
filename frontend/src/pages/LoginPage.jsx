@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
+import { Button, CircularProgress } from '@mui/material';
+import SEO from '../components/SEO';
 import axios from 'axios';
 
 /* ─────────────── Toast Notification Component ─────────────── */
@@ -153,6 +155,10 @@ const LoginPage = () => {
 
   return (
     <div className="h-screen w-full overflow-hidden bg-[#fdfbf7] flex flex-col font-sans">
+      <SEO 
+        title="Login" 
+        description="Login to your Velora dashboard to manage your family finances." 
+      />
 
       {/* Toast Notification */}
       {toast && <Toast key={toast.key} message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
@@ -275,18 +281,23 @@ const LoginPage = () => {
               </div>
 
               {/* Login Button */}
-              <button 
+              <Button 
                 type="submit" 
+                variant="contained"
+                fullWidth
                 disabled={loading}
-                className="w-full bg-[#13766b] hover:bg-[#106259] text-white py-2.5 rounded-xl font-medium text-[13px] transition-colors disabled:opacity-70 disabled:cursor-not-allowed shadow-sm cursor-pointer"
+                sx={{ 
+                  bgcolor: '#13766b', 
+                  py: 1.5, 
+                  borderRadius: '12px', 
+                  fontSize: '13px', 
+                  fontWeight: 600,
+                  boxShadow: 'none',
+                  '&:hover': { bgcolor: '#106259', boxShadow: '0 4px 12px rgba(19, 118, 107, 0.2)' }
+                }}
               >
-                {loading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
-                    Logging in...
-                  </span>
-                ) : 'Login'}
-              </button>
+                {loading ? <CircularProgress size={20} color="inherit" /> : 'Login'}
+              </Button>
             </form>
 
             {/* Google Auth Divider & Button */}
